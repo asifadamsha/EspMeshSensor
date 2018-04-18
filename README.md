@@ -35,3 +35,8 @@ Bundle utilisées par l'API Symfony 4 :
 
 Template utilisé pour le panel d'administration :
   * [Gentela](https://github.com/puikinsh/gentelella)
+
+Librairies utilisées pour le panel d'administration :
+  * JQuery ;
+  * flot.js ;
+  * Bootstrap.
