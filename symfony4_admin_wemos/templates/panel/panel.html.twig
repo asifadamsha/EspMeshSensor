@@ -1,0 +1,284 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Panel{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href='{{ asset('vendors/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css') }}' rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href='{{ asset('vendors/gentelella/vendors/font-awesome/css/font-awesome.min.css') }}' rel="stylesheet">
+
+    <!-- bootstrap-progressbar -->
+    <link href='{{ asset('vendors/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}' rel="stylesheet">
+    <!-- JQVMap -->
+    <link href='{{ asset('vendors/gentelella/vendors/jqvmap/dist/jqvmap.min.css') }}' rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href='{{ asset('vendors/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css') }}' rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href='{{ asset('vendors/gentelella/build/css/custom.min.css') }}' rel="stylesheet">
+
+    <style>
+
+        .legendLabel {
+            color: #73879C;
+            margin-left: 10px;
+        }
+        .stats-overview {
+            border: 0px !important;
+        }
+        .x_title {
+            border-bottom: 1px solid #E6E9ED !important;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="{{ path('panel') }}" class="site_title"><i class="fa fa-line-chart"></i> <span>IoT Mesh ESP</span></a>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <!-- menu profile quick info -->
+                <div class="profile clearfix">
+                    <div class="profile_pic">
+                        <img src='{{ asset('images/troll-face.jpg') }}' alt="..." class="img-circle profile_img">
+                    </div>
+                    <div class="profile_info" style="
+                        padding-top: 15px;
+                    ">
+                        <span>Welcome,</span>
+                        <h2>Trololooo</h2>
+                    </div>
+                </div>
+                <!-- /menu profile quick info -->
+
+                <br />
+
+                <!-- sidebar menu -->
+                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                    <div class="menu_section">
+                        <h3>General</h3>
+                        <ul class="nav side-menu">
+                            <li class="active"><a class="active"><i class="fa fa-home"></i> Home </a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+                <!-- /sidebar menu -->
+
+            </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+            <div class="nav_menu">
+                <nav>
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="">
+                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <img src='{{ asset('images/troll-face.jpg') }}'alt="">Trololooo
+                            </a>
+                            <!--
+                            <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                <li><a href="javascript:;"> Profile</a></li>
+
+                                <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                            </ul>
+                            -->
+                        </li>
+
+
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <!-- top tiles -->
+            <div class="row tile_count">
+                <div class="col-sm-4 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-home"></i> Nombre de pièces</span>
+                    <div class="count">{{ countPiece }}</div>
+                </div>
+                <div class="col-sm-4 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-eyedropper"></i> Nombre de capteurs</span>
+                    <div class="count">{{ countDistinctCapteur }}</div>
+                </div>
+                <div class="col-sm-4 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-database"></i> Nombre d'enregistrements</span>
+                    <div class="count green">{{ countData }}</div>
+                </div>
+
+            </div>
+
+            <!-- /top tiles -->
+            {% for piece  in distinctPiece  %}
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="dashboard_graph">
+
+                            <div class="row x_title">
+                                <div class="col-md-8">
+                                    <h3>Graphique de la pièce <span style="color:#1ABB9C">{{ piece.piece }}</span></h3>
+                                </div>
+                                <div class="col-md-4">
+                                    <h3>Récapitulatif de la journée  <span style="color:#1ABB9C">{{ piece.piece }}</span></h3>
+                                </div>
+
+                            </div>
+
+                            <!-- Graphique -->
+                            <div class="col-md-8">
+                                <div id="chart_plot_{{ piece.piece|replace({' ':'_'}) }}" class="demo-placeholder"></div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <!-- Récapitulatif de la journée -->
+                                {% for dataCapteurPiece in minMaxAvgCapteur if  dataCapteurPiece.piece == piece.piece %}
+                                    <div>
+                                        <div class="x_title">
+                                            <h2>{{ dataCapteurPiece.capteur|capitalize  }}</h2>
+                                            <div class="clearfix"></div>
+                                        </div>
+
+
+                                        <ul class="stats-overview">
+                                            <li>
+                                                <span class="name"> Min</span>
+                                                <span class="value text-primary"> {{ dataCapteurPiece.min|number_format(1, '.', ',')  }}</span>
+                                            </li>
+                                            <li>
+                                                <span class="name"> Moyenne </span>
+                                                <span class="value text-warning"> {{ dataCapteurPiece.avg|number_format(1, '.', ',')  }} </span>
+                                            </li>
+                                            <li class="hidden-phone">
+                                                <span class="name"> Max </span>
+                                                <span class="value text-danger"> {{ dataCapteurPiece.max|number_format(1, '.', ',')  }} </span>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <br />
+            {% endfor %}
+
+
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer class="footer_fixed">
+            <div class="pull-right">
+                Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+            </div>
+            <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+    </div>
+
+
+    <!-- jQuery -->
+    <script src='{{ asset('vendors/gentelella/vendors/jquery/dist/jquery.js') }}'></script>
+
+    <!-- Bootstrap -->
+    <script src='{{ asset('vendors/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js') }}'></script>
+
+    <!-- Chart.js -->
+    <script src='{{ asset('vendors/gentelella/vendors/Chart.js/dist/Chart.min.js') }}'></script>
+
+    <!-- Flot -->
+    <script src='{{ asset('vendors/gentelella/vendors/Flot/jquery.flot.js') }}'></script>
+    <script src='{{ asset('vendors/gentelella/vendors/Flot/jquery.flot.pie.js') }}'></script>
+    <script src='{{ asset('vendors/gentelella/vendors/Flot/jquery.flot.time.js') }}'></script>
+    <script src='{{ asset('vendors/gentelella/vendors/Flot/jquery.flot.stack.js') }}'></script>
+    <script src='{{ asset('vendors/gentelella/vendors/Flot/jquery.flot.resize.js') }}'></script>
+
+    <!-- Flot plugins -->
+    <script src='{{ asset('vendors/gentelella/vendors/flot.orderbars/js/jquery.flot.orderBars.js') }}'></script>
+    <script src='{{ asset('vendors/gentelella/vendors/flot-spline/js/jquery.flot.spline.min.js') }}'></script>
+    <script src='{{ asset('vendors/gentelella/vendors/flot.curvedlines/curvedLines.js') }}'></script>
+
+
+    <!-- Custom Theme Scripts -->
+    <script src='{{ asset('vendors/gentelella/build/js/custom.js') }}'></script>
+
+    <script language="JavaScript">
+
+        function gd(year, month, day, hours, minutes, seconds) {
+
+            return new Date(year, month - 1, day, hours, minutes, seconds).getTime();
+        }
+
+
+        {% set piece    = '' %}
+        {% set capteur  = '' %}
+
+
+        {% for data  in datas  %}
+
+            {% if piece|replace({' ':'_'}) != data.piece|replace({' ':'_'})  %}
+                {% set capteur  = '' %}
+                {% set piece = data.piece|replace({' ':'_'}) %}
+                var  chart_plot_{{ data.piece|replace({' ':'_'}) }} = [];
+            {% endif %}
+
+            {% if capteur != data.capteur  %}
+                {% set capteur = data.capteur %}
+                chart_plot_{{ data.piece|replace({' ':'_'}) }}["{{ data.capteur }}"] = []
+            {% endif %}
+
+         chart_plot_{{ data.piece|replace({' ':'_'}) }}["{{ data.capteur }}"].push([gd({{ data.dateTime|date('Y, m, d,  H, i, s') }}), {{ data.valeur }}])
+        {% endfor %}
+
+
+        //permet de supprimer le nom des capteurs
+        function formatData(myArray) {
+
+            var arrayData = [];
+
+            for (var key in myArray) {
+                arrayData.push({
+                    data:   myArray[key],
+                    label:  key
+                });
+            }
+
+            return arrayData;
+        }
+
+        $(document).ready(function() {
+
+            {% for piece  in distinctPiece  %}
+                init_flot_chart(formatData(chart_plot_{{ piece.piece|replace({' ':'_'})  }}), "#chart_plot_{{ piece.piece|replace({' ':'_'}) }}");
+            {% endfor %}
+
+            init_sparklines();
+            init_sidebar();
+        });
+
+
+    </script>
+
+{% endblock %}
