@@ -11,6 +11,8 @@ Les wemos destinées à la récupération des informations sont connectés sur u
    * Des portes ;
    * Etc.
 
+![Archi tech](https://github.com/asifadamsha/EspMeshSensor/blob/master/images/Diagramme_tech.png)
+
 
  Le code de ces weemos est disponible dans le dossier [MeshTempWemos](./MeshTempWemos).
 
@@ -25,6 +27,8 @@ Libraries Arduino utilisées :
   * ESP8266WiFiMesh (communication sur le réseau Mesh);
   * ESP8266WiFi (communication WIFI);
   * DHT (Mesure des capteurs).
+  
+  ![DHT_Sensor](https://github.com/asifadamsha/EspMeshSensor/blob/master/images/esp_dht.png)
 
 Bundle utilisées par l'API Symfony 4 :
   * Annotations ;
