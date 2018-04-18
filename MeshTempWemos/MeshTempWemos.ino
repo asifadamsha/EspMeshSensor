@@ -8,6 +8,7 @@
 DHT dht(DHTPIN, DHTTYPE);
 
 float t,h;
+int temp,hum;
 unsigned int request_i = 0;
 unsigned int response_i = 0;
 
@@ -56,6 +57,10 @@ void loop()
   t = dht.readTemperature();
   h = dht.readHumidity();
 
+  temp = int(t*100);
+  hum = int(h*100);
+  
+
   //test du rendu 
   /*Serial.print("Temperature: ");
   Serial.print(t);
@@ -68,12 +73,13 @@ void loop()
   /* Accept any incoming connections */
   mesh_node.acceptRequest();
 
+  // changer le exterieur par la pièce désirée 
   /* Scan for other nodes and send them a message */
   char request[600];
-  sprintf(request, "/salon/temperature/%.2f",t);
+  sprintf(request, "/Extérieur/température/%d",temp);
   mesh_node.attemptScan(request);
-  sprintf(request, "/salon/humidity/%.2f",h);
+  sprintf(request, "/Extérieur/humidité/%d",hum);
   mesh_node.attemptScan(request);
-  delay(1000);
+  delay(10000);
 }
 
