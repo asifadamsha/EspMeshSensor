@@ -2,9 +2,9 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMesh.h>
 
-const char* ssid = "ESGI";
-const char* password = "Reseau-GES";
-String url = "http://192.168.1.88:8085";
+const char* ssid = "Fab";
+const char* password = "suggestions";
+String url = "http://192.168.43.137/symfony4_admin_wemos/public/index.php/data";
 
 String manageRequest(String request);
 
@@ -23,8 +23,12 @@ String manageRequest(String request)
   Serial.print("received: ");
   Serial.println(request);*/
 
+  String formattedData = request;
+
+  //formattedData.replace(".", "%2E");
+
   // send data to cloud
-  postData(request);
+  postData(formattedData);
 
   /* return a string to send back */
   char response[60];
