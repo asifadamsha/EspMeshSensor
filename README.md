@@ -6,16 +6,17 @@ Ce projet a pour but de créer une solution permettant de gérer un nombre varia
 
 Les wemos destinées à la récupération des informations sont connectés sur un réseau ayant une topologie [Mesh](https://fr.wikipedia.org/wiki/Topologie_mesh)
  afin de transmettre des données dans une large zone pouvant être pertubée par des obstacles  tel que :
+
    * Des murs ;
    * Des portes ;
    * Etc.
 
 
- Le code de ces weemos est disponible dans le dossier [espMaster](./espMaster).
+ Le code de ces weemos est disponible dans le dossier [MeshTempWemos](./MeshTempWemos).
 
 Une Wemos D1 mini aura un rôle plus central en faisant office de relai entre celles ayant des capteurs et l'API.
 
- Le code de cette weemos est disponible dans le dossier [espMaster](./EspMeshSensor).
+ Le code de cette weemos est disponible dans le dossier [espMaster](./espMaster).
 
  L'API recevant les différentes données se trouve dans le dossier [symfony4_admin_wemos](./symfony4_admin_wemos).
 
